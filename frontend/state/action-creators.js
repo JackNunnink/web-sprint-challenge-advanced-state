@@ -1,6 +1,6 @@
 // ❗ You don't need to add extra action creators to achieve MVP
 import axios from "axios"
-import { MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE, INPUT_CHANGE, RESET_FORM } from './action-types'
+import { MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE, INPUT_CHANGE, RESET_FORM, SET_INFO_MESSAGE } from './action-types'
 
 export function moveClockwise() {
   return {
@@ -14,9 +14,17 @@ export function moveCounterClockwise() {
   }
 }
 
-export function selectAnswer() { }
+export function selectAnswer() {
+  
+}
 
-export function setMessage() { }
+export function setMessage(message) {
+  console.log("message", message)
+  return {
+    type: SET_INFO_MESSAGE,
+    payload: message
+  }
+}
 
 export function setQuiz() { }
 
@@ -63,10 +71,13 @@ export function postQuiz({ newTrueAnswer, newQuestion, newFalseAnswer }) {
     axios.post(`http://localhost:9000/api/quiz/new`, newForm)
       .then(res => {
         // console.log('response', res)
-        dispatch(resetForm())
+        dispatch(setMessage(`Congrats: "${newQuestion}" is a great question!`))
       })
       .catch(err => {
         console.error('error', err)
+      })
+      .finally(() => {
+        dispatch(resetForm())
       })
   }
 }

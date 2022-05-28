@@ -21,9 +21,11 @@ export function Form(props) {
 
   const onSubmit = evt => {
     evt.preventDefault()
-    console.log('props', props);
+    // console.log('props', props);
     props.postQuiz(props.form)
   }
+
+  // const message = `Congrats: "${newQuestion}" is a great question!`
 
   return (
     <form id="form" onSubmit={onSubmit}>
