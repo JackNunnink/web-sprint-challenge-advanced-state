@@ -55,7 +55,7 @@ function form(state = initialFormState, action) {
       const { key, value } = action.payload
       return {
         ...state,
-        [key]: value
+        [key]: value.toString().trim()
       }
     }
     
@@ -64,7 +64,7 @@ function form(state = initialFormState, action) {
     }
 
     default:
-      return state
+      return state || initialFormState
   }
 }
 
