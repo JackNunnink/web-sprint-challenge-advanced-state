@@ -1,34 +1,55 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import * as actionCreators from '../state/action-creators'
 
-export default function Quiz(props) {
+function Quiz(props) {
+  console.log("quiz props", props)
+  const handleSelect = () => {
+    props.selectAnswer()
+  }
+
+  useEffect(() => {
+    props.fetchQuiz()
+  }, [])
+
+  const disabled = () => {
+    if(props.selectedAnswer.answer === false) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   return (
     <div id="wrapper">
       {
         // quiz already in state? Let's use that, otherwise render "Loading next quiz..."
         true ? (
           <>
-            <h2>What is a closure?</h2>
+            <h2>{props.quiz.question}</h2>
 
             <div id="quizAnswers">
-              <div className="answer selected">
-                A function
+              <div className={`answer ${props.selectedAnswer.answer === true && 'selected' || ''}`} onClick={handleSelect}>
+                {props.quiz.answers[0].text}
                 <button>
-                  SELECTED
+                  {`${props.selectedAnswer.answer === true && 'SELECTED' || 'Select'}`}
                 </button>
               </div>
 
-              <div className="answer">
-                An elephant
+              <div className={`answer ${props.selectedAnswer.answer === true && 'selected' || ''}`} onClick={handleSelect}>
+                {props.quiz.answers[1].text}
                 <button>
-                  Select
+                  {`${props.selectedAnswer.answer === true && 'SELECTED' || 'Select'}`}
                 </button>
               </div>
             </div>
 
-            <button id="submitAnswerBtn">Submit answer</button>
+            <button id="submitAnswerBtn" disabled={disabled()}>Submit answer</button>
           </>
         ) : 'Loading next quiz...'
       }
     </div>
   )
 }
+
+export default connect(st => st, actionCreators)(Quiz)

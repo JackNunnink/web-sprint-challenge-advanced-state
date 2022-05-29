@@ -1,6 +1,6 @@
 // ❗ You don't need to add extra reducers to achieve MVP
 import { combineReducers } from 'redux'
-import { MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE, INPUT_CHANGE, RESET_FORM, SET_INFO_MESSAGE } from './action-types'
+import { MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE, INPUT_CHANGE, RESET_FORM, SET_INFO_MESSAGE, SET_SELECTED_ANSWER, SET_QUIZ_INTO_STATE } from './action-types'
 
 const initialWheelState = 0
 function wheel(position, action) {
@@ -17,19 +17,64 @@ function wheel(position, action) {
   }
 }
 
-const initialQuizState = null
+const initialQuizState = {
+  answers: [
+    {
+      answer_id: '',
+      text: ''
+    },
+    {
+      answer_id: '',
+      text: ''
+    }
+  ],
+  question: '',
+  quiz_id: ''
+}
 function quiz(state = initialQuizState, action) {
-  return state
+  // console.log("quiz action", action.payload)
+  switch (action.type) {
+    case SET_QUIZ_INTO_STATE:
+      return {
+        ...state,
+        answers: [
+          {
+            answer_id: action.payload.answers[0].answer_id,
+            text: action.payload.answers[0].text
+          },
+          {
+            answer_id: action.payload.answers[1].answer_id,
+            text: action.payload.answers[1].text
+          }
+        ],
+        question: action.payload.question,
+        quiz_id: action.payload.quiz_id
+      }
+
+      default:
+        return state || initialQuizState
+  }
 }
 
-const initialSelectedAnswerState = null
+const initialSelectedAnswerState = {
+  answer: false
+}
 function selectedAnswer(state = initialSelectedAnswerState, action) {
-  return state
+  switch (action.type) {
+    case SET_SELECTED_ANSWER:
+      return {
+        ...state,
+        answer: !state.answer
+      }
+
+    default:
+      return state || initialSelectedAnswerState 
+  }
 }
 
 const initialMessageState = { message: '' }
 function infoMessage(state = initialMessageState, action) {
-  console.log("action.payload", action.payload)
+  // console.log("action.payload", action.payload)
   switch (action.type) {
     case SET_INFO_MESSAGE: {
       const message = action.payload
