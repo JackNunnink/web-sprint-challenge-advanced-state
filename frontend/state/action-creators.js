@@ -14,9 +14,10 @@ export function moveCounterClockwise() {
   }
 }
 
-export function selectAnswer() {
+export function selectAnswer(answerId) {
   return {
-    type: SET_SELECTED_ANSWER
+    type: SET_SELECTED_ANSWER,
+    payload: answerId
   }
 }
 
@@ -65,12 +66,24 @@ export function fetchQuiz() {
       })
   }
 }
-export function postAnswer() {
+export function postAnswer(answer) {
+  console.log("answer", answer)
   return function (dispatch) {
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state
     // - Dispatch the fetching of the next quiz
+    axios.post(`http://localhost:9000/api/quiz/answer`, answer)
+      .then(res => {
+        console.log("answer post", res.data)
+        dispatch(setMessage(res.data.message))
+      })
+      .catch(err => {
+        console.error("answer post error", err)
+      })
+      .finally(() => {
+        dispatch(fetchQuiz())
+      })
   }
 }
 export function postQuiz({ newTrueAnswer, newQuestion, newFalseAnswer }) {

@@ -60,11 +60,12 @@ const initialSelectedAnswerState = {
   answer: false
 }
 function selectedAnswer(state = initialSelectedAnswerState, action) {
+  console.log('state', state);
   switch (action.type) {
     case SET_SELECTED_ANSWER:
       return {
         ...state,
-        answer: !state.answer
+        answer: action.payload
       }
 
     default:
